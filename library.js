@@ -1,9 +1,5 @@
 /**
  * todo:
- * put any repeated code into functions
- * 
- * 
- * todo:
  * style it
  */
  let myLibrary = [
@@ -18,13 +14,10 @@ function Book(title,author,numPages,hasBeenRead) {
     this.hasBeenRead = hasBeenRead;
 }
 
-function addBookToLibrary(bookToAdd) {
-    // do stuff here
-    myLibrary.push(bookToAdd);
-
+function bookObjectToBookMarkup(bookObject){
     // turn object data into markup
     //for the recent book in library
-    let newestBookInLibrary = myLibrary[myLibrary.length - 1];
+    let newestBookInLibrary = bookObject;
 
     //container element 
     let bookElement = document.createElement("li");
@@ -69,11 +62,9 @@ function addBookToLibrary(bookToAdd) {
         });
         //update localstorage
         saveLibraryToLocalStorage();
-
+        
+        //
         removeBookButton.closest('.book').remove();
-        
-        
-
     });
 
     let changeBookReadStatusButton = document.createElement('button');
@@ -83,19 +74,19 @@ function addBookToLibrary(bookToAdd) {
     changeBookReadStatusButton.addEventListener('click', () => {
         console.log(changeBookReadStatusButton.closest('.book'));
         //toggle book's read status on book prototype instance
-        console.log(bookToAdd.hasBeenRead,'before toggle');
-        if(bookToAdd.hasBeenRead){
-            bookToAdd.hasBeenRead = false;
+        console.log(bookObject.hasBeenRead,'before toggle');
+        if(bookObject.hasBeenRead){
+            bookObject.hasBeenRead = false;
         } else{
-            bookToAdd.hasBeenRead = true;
+            bookObject.hasBeenRead = true;
         }
-        console.log(bookToAdd.hasBeenRead,'after toggle');
+        console.log(bookObject.hasBeenRead,'after toggle');
 
         //update
         saveLibraryToLocalStorage();
 
         //update display
-        changeBookReadStatusButton.closest('.book').children[3].textContent = 'has book been read?: '+ bookToAdd.hasBeenRead
+        changeBookReadStatusButton.closest('.book').children[3].textContent = 'has book been read?: '+ bookObject.hasBeenRead
 
     });
 
@@ -111,8 +102,6 @@ function addBookToLibrary(bookToAdd) {
     bookElement.appendChild(changeBookReadStatusButton);
 
     //add book to library element
-    console.log(bookElement.children);
-
     document.getElementById('library').appendChild(bookElement);
  
     // call function that saves
@@ -120,15 +109,16 @@ function addBookToLibrary(bookToAdd) {
     saveLibraryToLocalStorage();
 }
 
-function saveLibraryToLocalStorage(){
- //saves the whole library array
- // to localStorage every
- //time a new book is created,
- 
- //localStorage uses JSON to send and store data,
- //and when you retrieve the data,
- //it will also be in JSON format.
+function addBookToLibrary(bookToAdd) {
+    //add book object data to library array
+    myLibrary.push(bookToAdd);
 
+    //call function to generate markup
+    //from object data
+    bookObjectToBookMarkup(bookToAdd);
+}
+
+function saveLibraryToLocalStorage(){
  /**
   * call function that checks if 
   * local storage is supported and available
@@ -137,10 +127,9 @@ function saveLibraryToLocalStorage(){
     //storage is available
     //save library array to local storage or update it
     localStorage.setItem('library',JSON.stringify(myLibrary));
-
    } else{
        // can not use storage
-      console.log('no storage');
+        console.log('no storage');
    }
 }
 
@@ -169,16 +158,9 @@ function storageAvailable(type) {
     }
 }
 
-function loadLibraryFromStorage(){
-    // Make sure your app doesn’t crash if the array you retrieve
-    // from localStorage isn’t there!
-    
-    // Keep in mind you cannot store functions in JSON,
-    //so you’ll have to figure out how to add methods back
-    //to your object properties once you fetch them.
+function loadLibraryFromStorage(){    
     if(storageAvailable('localStorage')){
         //storage is available
-
         //if item in local storage is not null,it exist
         if(localStorage.getItem('library') != null){
             let storageLib = JSON.parse(localStorage.getItem('library'));
@@ -186,27 +168,22 @@ function loadLibraryFromStorage(){
             myLibrary = storageLib;
             console.log(myLibrary,'l')
         }
-
     } else{
         // can not use storage
-       }
-
-    
+       }  
 }
 
 //load dynamic content once the html and css is ready
 document.addEventListener('DOMContentLoaded', (event) => {
     //
-    console.log('ready');
+    console.log('dom is ready');
 
     //
     let libraryElement = document.getElementById('library');
 
     // add function that looks for library array in localStorage
     // when your app is first loaded.
-    //myLibrary = loadLibraryFromStorage(); 
     loadLibraryFromStorage();
-    console.log(myLibrary);
 
     //if myLibrary has elements display it
     if(myLibrary != undefined){
@@ -214,106 +191,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         (function displayLibrary(library){
             // add books to the library element
             library.forEach((book) => {
-                /*
-                    dynamically create the
-                    html for the books add the content
-                    to the html from the book and
-                    add class to the book for styling
-                    */
-                   
-                // turn object data into markup
-                //container element 
-                let bookElement = document.createElement("li");
-                bookElement.className = 'book';
-                
-                //title element 
-                let bookTitleElement = document.createElement('h2');
-                bookTitleElement.className = 'title';
-                bookTitleElement.textContent = book.title;
-                
-                //author element 
-                let bookAuthorElement = document.createElement('p');
-                bookAuthorElement.className = 'author';
-                bookAuthorElement.textContent = 'by ' + book.author;
-                
-                //page count element
-                let bookPageElement = document.createElement('p');
-                bookPageElement.className = 'numPages';
-                bookPageElement.textContent = book.numPages + ' Pages'; 
-                
-                
-                
-                //has been read element
-                let bookBeenReadElement = document.createElement('p');
-                bookBeenReadElement.className = 'hasBeenRead';
-                bookBeenReadElement.textContent = 'has book been read?: '+ book.hasBeenRead;
-                
-                //has been read element
-                //removeBookButton
-                let removeBookButton = document.createElement('button');
-                removeBookButton.textContent = 'x remove this book';
-                removeBookButton.setAttribute('data-book-remove','');
-                
-                //add event listner to button
-                removeBookButton.addEventListener('click',() => { 
-                    //update library array
-                    myLibrary = myLibrary.filter(book => {
-                        if(book.title != removeBookButton.closest('.book').children[0].textContent &&
-                           book.author != removeBookButton.closest('.book').children[1].textContent &&
-                           book.numPages != removeBookButton.closest('.book').children[2].textContent &&
-                           book.hasBeenRead != removeBookButton.closest('.book').children[3].textContent
-                         ){
-                            return book;
-                         }
-                    });
-                    //update localstorage
-                    saveLibraryToLocalStorage();
-
-                    //remove book from page
-                    removeBookButton.closest('.book').remove();
-
-                });
-                
-                let changeBookReadStatusButton = document.createElement('button');
-                changeBookReadStatusButton.textContent = 'press to change status';
-                changeBookReadStatusButton.setAttribute('data-book-status','');
-                
-                changeBookReadStatusButton.addEventListener('click', () => {
-                    console.log(changeBookReadStatusButton.closest('.book'));
-                    //toggle book's read status on book prototype instance
-                    console.log(book.hasBeenRead,'before toggle');
-                    if(book.hasBeenRead){
-                        book.hasBeenRead = false;
-                    } else{
-                        book.hasBeenRead = true;
-                    }
-                    console.log(book.hasBeenRead,'after toggle');
-
-                    //update local storage
-                    saveLibraryToLocalStorage();
-
-                    //update display
-                    changeBookReadStatusButton.closest('.book').children[3].textContent = 'has book been read?: '+ book.hasBeenRead
-                    
-                });
-                //add sub books elements to book element
-                // which book element acts as container
-                bookElement.appendChild(bookTitleElement);
-                bookElement.appendChild(bookAuthorElement);
-                bookElement.appendChild(bookPageElement);
-                bookElement.appendChild(bookBeenReadElement);
-
-                bookElement.appendChild(removeBookButton); 
-                bookElement.appendChild(changeBookReadStatusButton);
-                
-                //add book to library element
-                libraryElement.appendChild(bookElement);
+                //
+                bookObjectToBookMarkup(book);
             });
             //add library element to the page
             document.body.appendChild(libraryElement);
         })(myLibrary); 
     }
-    
     
     //adding a new book from user
     const modalOpenButtons = document.querySelectorAll('[data-modal-target]');
@@ -340,7 +224,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             closeModal(modal);
         });
     });
-
 
     function openModal(modal) {
         if(modal == null){
@@ -369,6 +252,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (handler) {
             console.log('did submit?',submitter,handler,form);
             console.log(form.children);
+            
+            //gather form data
             //title
             let newBookTitle = form.children[0].children[1].value;
             //console.log(form.children[0].children[1].value);
@@ -385,14 +270,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
             let NewBookHasBeenRead = ((form.children[3].children[1].value) == 'True' ? true : false);
             //console.log(form.children[3].children[1].value);
             
-            //create new book
+            //instantiate book from form data
             let newBook = Object.create(Book);
             newBook.title = newBookTitle;
             newBook.author = newBookAuthor;
             newBook.numPages = newBookPageCount;
             newBook.hasBeenRead = NewBookHasBeenRead;
 
-            //add new book to the library
+            //add new book object to the library
             addBookToLibrary(newBook);
 
             //close modal form
