@@ -1,21 +1,195 @@
+:root{
+    --page-fold: 0%;
+}
+
+/*
+styles for library section
+*/
+#librarySection{
+    background-color: darkgreen;
+}
+
+#librarySection header{
+    background-color:rgb(32, 43, 13);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom-right-radius: var(--page-fold)
+}
+
+
+#librarySection h1{
+    color: rgb(225, 243, 225);
+    text-align: center;
+}
+
+#addNewBookButton{
+    border: rgb(44, 56, 24) double 10px;
+    border-radius: 10%;
+    background-color: darkred;
+    color: rgb(230, 245, 230);
+    box-shadow: 0 9px rgb(18, 24, 8);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+#addNewBookButton:active {
+    transform: translateY(3px);
+    box-shadow: 0 6px rgb(2, 3, 1);
+}
+
 #library{
     display:flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
     gap: 9px;
-    width:100%;
-    background-color: green;
-    padding: 9px;
+    background:linear-gradient(green,rgb(1, 73, 1));
+    margin-top: 0%;
+    padding-top: 27px;
 }
 
+/*
+@ styling book element
+*/
+
+/*
+todo:
+depending on text in the book element
+the size of the book changes
+making some books different dimensions
+then other books
+
+need to have so that all books have same
+dimensions regardless of the content on the
+cover
+*/
+
+/*styles for book 'element'*/
 .book{
-    
     display: flex;
     flex-direction: column;
-    background-color: rgb(174, 0, 255);
+    justify-content: center;
+    background-color:rgba(255, 0, 255, 0.61);
     width: 270px;
-    border: 10px mediumaquamarine solid;
+    border: rgba(255, 0, 255, 0.185) 3px solid;
+    border-radius: 3%;
+    
+    /*
+    todo: depending on the number of pages
+    add more or less box shadows to make it
+    look like there are more or less pages
+    in the book
+
+    todo: add side book lines
+    */
+
+    box-shadow: 
+    inset -3px 0 0px purple,
+    inset -5px 0 0px white,
+    inset -7px 0 0px purple,
+    inset -3px -3px white;
+    margin: 10px;
+}
+
+.book .bookHeader{
+    /* todo: add side book lines */
+    /* element and use display flex */
+    background-color: rgba(255, 219, 255, 0.308) !important;;
+    display:flex;
+    justify-content: center;
+    box-shadow: 
+    inset -3px 3px rgb(92, 1, 92),
+    inset -3px 6px white,
+    inset -3px 7px grey,
+    inset -3px 10px white,
+    inset -3px 11px grey,
+    inset -3px 14px white,
+    inset -3px 15px grey,
+    inset -3px 18px white,
+    inset -3px 0 0px purple,
+    inset -5px 0 0px white,
+    inset -7px 0 0px rgb(124, 0, 0);
+}
+
+.title{
+    /*
+    todo:
+    use js to make it so that
+    each book has a different font for the tile
+    and different text decorations
+    some with underlines some with out and 
+    maybe others too.
+    */
+    text-align: center;
+    font-weight: 900;
+    width: 100%;
+    height: 100%;
+    padding: 32px 27px 9px 0px;
+}
+
+.author{
+    text-align: center;
+    padding: 0 27px 0 0;
+    font-style: italic;
+    align-self: flex-end;
+}
+
+.bookInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 9px;
+    background-color:violet;
+    box-shadow: 
+    inset -3px 0 0px purple,
+    inset -5px 0 0px white,
+    inset -7px 0 0px purple;
+}
+
+.bookButtons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 27px;
+    padding: 9px;
+    
+    box-shadow:
+    inset -3px 0 0px purple,
+    inset -5px 0 0px white,
+    inset -7px 0 0px purple,
+    inset -3px -3px white;
+
+}
+
+.bookButtons button{
+    background-color: rgba(203, 211, 197, 0.815);
+    color: rgb(0, 0, 0);
+    box-shadow: 0px -9px rgb(125, 128, 123);
+    cursor: pointer;
+    font-weight: 700;
+    margin-top: 9px;
+}
+
+.bookButtons button:active {
+    transform: translateY(-3px);
+    box-shadow: 0 -6px rgb(52, 54, 50);
+}
+
+.numPages{
+
+}
+
+.hasBeenRead{
+    text-align: center;
+}
+
+.removeBookButton{
+
+}
+
+.changeHasBeenReadStatusButton{
+
 }
 
 /*form/modal styles*/
@@ -44,10 +218,17 @@
     align-items: center;
     padding: 0 27px;
     border-bottom: green dotted 3px;
+    background-color:rgb(32, 43, 13);
+    color: white;
+}
+
+.modal-header .close-modal{
+    color: white;
 }
 
 .modal-header .title{
     /*todo style later*/
+
 }
 
 .modal-body{
@@ -79,4 +260,107 @@
 #overlay.active {
     opacity: 1;
     pointer-events: all;
+}
+
+/*
+todo get classes and id from js
+and style form
+*/
+#newBookForm{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 9px;
+padding:9px;
+color: whitesmoke;
+background:linear-gradient(green,rgb(1, 73, 1));
+
+}
+
+#newBookForm div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+}
+
+#newBookForm div label{
+    flex: 1;
+    width:50%;
+    text-align: center;
+}
+
+#newBookForm div input{
+    flex: 1;
+    width:50%;
+}
+
+#newBookForm div select{
+    flex: 1;
+    width:50%;
+}
+
+#newBookForm div option{
+    flex: 1;
+    width: 50%;
+}
+
+
+
+#title-field{
+
+}
+
+#title-label{
+
+}
+
+#title-input{
+
+}
+
+#author-field{
+
+}
+
+#author-label{
+
+}
+
+#author-label{
+
+}
+
+#pageCount-field{
+
+}
+
+#pageCount-label{
+
+}
+
+#pageCount-input{
+
+}
+
+#hasBeenRead-field{
+
+}
+
+#hasBeenRead-label{
+    
+}
+
+#hasBeenRead-Select{
+
+}
+
+.hasBeenRead-option{
+
+}
+
+/* form submit button */
+#newBookForm button {
+    align-self: stretch;
 }

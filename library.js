@@ -1,7 +1,12 @@
 /**
  * todo:
- * style it
- */
+    make is such that when a new book is added
+    it has a random color for background
+    and text color but the colors though
+    random will insure there is enough
+    constrast such that the text will be 
+    readable
+*/
  let myLibrary = [
     
 ];
@@ -23,6 +28,10 @@ function bookObjectToBookMarkup(bookObject){
     let bookElement = document.createElement("li");
     bookElement.className = 'book';
 
+    //header for the title and author
+    let bookHeader = document.createElement('header');
+    bookHeader.className = 'bookHeader';
+
     //title element 
     let bookTitleElement = document.createElement('h2');
     bookTitleElement.className = 'title';
@@ -32,7 +41,10 @@ function bookObjectToBookMarkup(bookObject){
     let bookAuthorElement = document.createElement('p');
     bookAuthorElement.className = 'author';
     bookAuthorElement.textContent = 'by ' + newestBookInLibrary.author;
-        
+    
+    let bookInfo = document.createElement('div');
+    bookInfo.classList = 'bookInfo';
+
     //page count element
     let bookPageElement = document.createElement('p');
     bookPageElement.className = 'numPages';
@@ -41,21 +53,30 @@ function bookObjectToBookMarkup(bookObject){
     //has been read element
     let bookBeenReadElement = document.createElement('p');
     bookBeenReadElement.className = 'hasBeenRead';
-    bookBeenReadElement.textContent = 'has book been read?: '+ newestBookInLibrary.hasBeenRead;
+    bookBeenReadElement.textContent = 'has been read?: '+ newestBookInLibrary.hasBeenRead;
     
+    let bookButtons = document.createElement('div');
+    bookButtons.className = 'bookButtons';
+
     //removeBookButton
     let removeBookButton = document.createElement('button');
-    removeBookButton.textContent = 'x remove this book';
+    removeBookButton.className = 'removeBookButton'
+    removeBookButton.textContent = 'remove book';
     removeBookButton.setAttribute('data-book-remove','');
 
     //add event listner to button
     removeBookButton.addEventListener('click',() => {
+        let titleContent = removeBookButton.closest('.book').children[0].children[0].textContent;
+        let authorContent = removeBookButton.closest('.book').children[0].children[1].textContent;    
+        let pagesInfo = removeBookButton.closest('.book').children[1].children[0].textContent;
+        let BeenReadInfo = removeBookButton.closest('.book').children[1].children[1].textContent;
+      
         //update library array
         myLibrary = myLibrary.filter(book => {
-            if(book.title != removeBookButton.closest('.book').children[0].textContent &&
-               book.author != removeBookButton.closest('.book').children[1].textContent &&
-               book.numPages != removeBookButton.closest('.book').children[2].textContent &&
-               book.hasBeenRead != removeBookButton.closest('.book').children[3].textContent
+            if(book.title != titleContent &&
+               book.author != authorContent &&
+               book.numPages != pagesInfo &&
+               book.hasBeenRead != BeenReadInfo
              ){
                 return book;
              }
@@ -68,38 +89,47 @@ function bookObjectToBookMarkup(bookObject){
     });
 
     let changeBookReadStatusButton = document.createElement('button');
-    changeBookReadStatusButton.textContent = 'press to change status';
+    changeBookReadStatusButton.className = 'changeHasBeenReadStatusButton';
+    changeBookReadStatusButton.textContent = 'change status';
     changeBookReadStatusButton.setAttribute('data-book-status','');
 
     changeBookReadStatusButton.addEventListener('click', () => {
-        console.log(changeBookReadStatusButton.closest('.book'));
+        //console.log(changeBookReadStatusButton.closest('.book'));
         //toggle book's read status on book prototype instance
-        console.log(bookObject.hasBeenRead,'before toggle');
+        //console.log(bookObject.hasBeenRead,'before toggle');
         if(bookObject.hasBeenRead){
             bookObject.hasBeenRead = false;
         } else{
             bookObject.hasBeenRead = true;
         }
-        console.log(bookObject.hasBeenRead,'after toggle');
+        //console.log(bookObject.hasBeenRead,'after toggle');
 
         //update
         saveLibraryToLocalStorage();
-
+        
         //update display
-        changeBookReadStatusButton.closest('.book').children[3].textContent = 'has book been read?: '+ bookObject.hasBeenRead
+        bookButtons.closest('.book').children[1].children[1].textContent = 'has been read?: '+ bookObject.hasBeenRead
 
     });
 
+    //place title and author into bookheader
+    bookHeader.appendChild(bookTitleElement);
+    bookHeader.appendChild(bookAuthorElement);
+
+    //place page count and has been read
+    //into bookinfo
+    bookInfo.appendChild(bookPageElement);
+    bookInfo.appendChild(bookBeenReadElement);
+
+    //place button into bookbuttons
+    bookButtons.appendChild(removeBookButton);
+    bookButtons.appendChild(changeBookReadStatusButton);
+
     //add sub books elements to book element
     // which book element acts as container
-    bookElement.appendChild(bookTitleElement);
-    bookElement.appendChild(bookAuthorElement);
-    bookElement.appendChild(bookPageElement);
-    bookElement.appendChild(bookBeenReadElement);
-
-    bookElement.appendChild(removeBookButton);
-
-    bookElement.appendChild(changeBookReadStatusButton);
+    bookElement.appendChild(bookHeader);
+    bookElement.appendChild(bookInfo);
+    bookElement.appendChild(bookButtons);
 
     //add book to library element
     document.getElementById('library').appendChild(bookElement);
@@ -164,9 +194,7 @@ function loadLibraryFromStorage(){
         //if item in local storage is not null,it exist
         if(localStorage.getItem('library') != null){
             let storageLib = JSON.parse(localStorage.getItem('library'));
-            console.log(storageLib,'s');
             myLibrary = storageLib;
-            console.log(myLibrary,'l')
         }
     } else{
         // can not use storage
@@ -195,7 +223,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 bookObjectToBookMarkup(book);
             });
             //add library element to the page
-            document.body.appendChild(libraryElement);
+            document.getElementById('librarySection').appendChild(libraryElement);
         })(myLibrary); 
     }
     
@@ -206,6 +234,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     
     modalOpenButtons.forEach(button => {
         button.addEventListener('click', () => {
+            let header = document.getElementById('librarySection').children[0];
+            header.style.setProperty('--page-fold','25%');
+            //
             const modal = document.querySelector(button.dataset.modalTarget);
             openModal(modal);
         });
@@ -229,7 +260,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if(modal == null){
             return;
         }
-        console.log('?');
         modal.classList.add('active');
         overlay.classList.add('active');
     }
@@ -238,6 +268,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if(modal == null){
             return;
         }
+        let header = document.getElementById('librarySection').children[0];
+        header.style.setProperty('--page-fold','0%');
         modal.classList.remove('active');
         overlay.classList.remove('active');
     }
@@ -250,9 +282,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let handler = submitter.id;
       
         if (handler) {
-            console.log('did submit?',submitter,handler,form);
-            console.log(form.children);
-            
             //gather form data
             //title
             let newBookTitle = form.children[0].children[1].value;

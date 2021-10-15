@@ -10,15 +10,20 @@
 </head>
 <body>
     <!--library-->
-    <button data-modal-target="#modal" id="addNewBookButton">+ new book</button>
-    <ul id="library">
-        <!--book add via the script library.js-->
-    </ul>
-
+    <section id="librarySection">
+        <header>
+            <h1>Library</h1>
+            <button data-modal-target="#modal" id="addNewBookButton">+ new book</button>
+        </header>
+        <ul id="library">
+            <!--book add via the script library.js-->
+        </ul>
+    </section>
+    
     <!--modal/form-->
     <div class="modal" id="modal">
         <div class="modal-header">
-            <div class="modal-title">add new book</div>
+            <div class="modal-title">Add a new book</div>
             <button data-modal-close class="close-modal">&times;</button>
         </div>
         <div class="modal-body">
@@ -26,20 +31,20 @@
             <form id="newBookForm" name="newBookForm">
                 <div id="title-field">
                     <label for="title" id="title-label">Title</label>
-                    <input type="text" name="title" id="title-input" placeholder="Enter the book's title" required='true'>
+                    <input type="text" name="title" id="title-input" placeholder="The book's title" required='true'>
                 </div>
                 <div id="author-field">
                     <label for="author" id="author-label">Author</label>
-                    <input type="text" name="author" id="author-label" placeholder="Enter book's author" required="true">
+                    <input type="text" name="author" id="author-label" placeholder="The book's author" required="true">
                 </div>
                 <div id="pageCount-field">
                     <label for="numPages" id="pageCount-label">Page count</label>
                     <input type="number" name="numPages" id="pageCount-input" placeholder="how many pages?" required="true">
                 </div>
                 <div id="hasBeenRead-field">
-                    <label for="hasBeenRead" id="hasBeenRead-label">have you already ready this book?</label>
+                    <label for="hasBeenRead" id="hasBeenRead-label">Have you read this?</label>
                     <select name="hasBeenRead" id="hasBeenRead-Select" required="true">
-                        <option value="" class="hasBeenRead-option">--Please choose an option</option>
+                        <option value="" class="hasBeenRead-option">--Please choose</option>
                         <option value="True" class="hasBeenRead-option">True</option>
                         <option value="False" class="hasBeenRead-option">False</option>
                     </select>
