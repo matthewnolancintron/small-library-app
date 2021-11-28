@@ -7,16 +7,19 @@
     constrast such that the text will be 
     readable
 */
+
+
  let myLibrary = [
     
 ];
 
-function Book(title,author,numPages,hasBeenRead) {
-    // the constructor
-    this.title = title;
-    this.author = author;
-    this.numPages = numPages;
-    this.hasBeenRead = hasBeenRead;
+class Book{
+    constructor(title,author,numPages,hasBeenRead){
+        this.title = title;
+        this.author = author;
+        this.numPages = numPages;
+        this.hasBeenRead = hasBeenRead;
+    }
 }
 
 function bookObjectToBookMarkup(bookObject){
@@ -300,12 +303,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             //console.log(form.children[3].children[1].value);
             
             //instantiate book from form data
-            let newBook = Object.create(Book);
-            newBook.title = newBookTitle;
-            newBook.author = newBookAuthor;
-            newBook.numPages = newBookPageCount;
-            newBook.hasBeenRead = NewBookHasBeenRead;
-
+            let newBook = new Book(newBookTitle,newBookAuthor,newBookPageCount,NewBookHasBeenRead);
+           
             //add new book object to the library
             addBookToLibrary(newBook);
 
